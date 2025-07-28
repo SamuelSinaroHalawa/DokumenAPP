@@ -1,0 +1,59 @@
+<ion-content class="ion-padding login-background" fullscreen>
+  <div class="login-container">
+    <ion-card class="glass-card">
+      <ion-card-header class="ion-text-center">
+        <!-- Logo -->
+        <img src="assets/padang.jpg" alt="Logo Kelurahan Padang Bulan" class="logo-kelurahan" />
+
+        <ion-card-title class="ion-margin-top">Login Pengguna</ion-card-title>
+        <ion-card-subtitle>Kelurahan Padang Bulan</ion-card-subtitle>
+        <ion-card-subtitle>Masuk untuk mengakses layanan dokumen</ion-card-subtitle>
+      </ion-card-header>
+
+      <ion-card-content>
+        <!-- NIK -->
+        <ion-item class="input-custom" lines="inset">
+          <ion-icon slot="start" name="person-outline" color="primary"></ion-icon>
+          <ion-input
+            placeholder="NIK"
+            type="text"
+            [(ngModel)]="nik"
+            inputmode="numeric"
+            maxlength="16"
+          ></ion-input>
+        </ion-item>
+
+        <!-- Password -->
+        <ion-item class="input-custom" lines="inset">
+          <ion-icon slot="start" name="lock-closed-outline" color="primary"></ion-icon>
+          <ion-input
+            placeholder="Password"
+            type="password"
+            [(ngModel)]="password"
+          ></ion-input>
+        </ion-item>
+
+        <!-- Tombol Masuk -->
+        <ion-button
+          expand="block"
+          color="primary"
+          shape="round"
+          (click)="login()"
+        >
+          <ion-icon name="log-in-outline" slot="start"></ion-icon>
+          Masuk
+        </ion-button>
+
+        <!-- Link ke Register -->
+        <ion-button
+          expand="block"
+          fill="clear"
+          color="medium"
+          (click)="goToRegister()"
+        >
+          Belum punya akun? <strong>Daftar di sini</strong>
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>

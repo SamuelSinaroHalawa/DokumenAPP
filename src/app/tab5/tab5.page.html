@@ -1,0 +1,178 @@
+<ion-header translucent="true">
+  <ion-toolbar color="primary">
+    <ion-title class="ion-text-center">🧑‍💼 Panel Petugas</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content fullscreen class="ion-padding content-background">
+  <!-- FORM LOGIN PETUGAS -->
+  <div *ngIf="!isLoggedIn" class="login-wrapper">
+    <ion-card class="login-card glass">
+      <ion-card-header class="ion-text-center">
+        <ion-icon name="shield-checkmark-outline" size="large" color="primary"></ion-icon>
+        <ion-card-title class="ion-margin-top">Login Petugas</ion-card-title>
+        <ion-card-subtitle>Hanya petugas yang dapat memvalidasi dokumen</ion-card-subtitle>
+      </ion-card-header>
+
+      <ion-card-content>
+        <ion-item lines="inset">
+          <ion-icon slot="start" name="person-circle-outline" color="medium"></ion-icon>
+          <ion-input [(ngModel)]="username" placeholder="Username"></ion-input>
+        </ion-item>
+
+        <ion-item lines="inset">
+          <ion-icon slot="start" name="key-outline" color="medium"></ion-icon>
+          <ion-input [(ngModel)]="password" type="password" placeholder="Password"></ion-input>
+        </ion-item>
+
+        <ion-button expand="block" color="primary" class="login-btn" (click)="loginAdmin()">
+          <ion-icon slot="start" name="log-in-outline"></ion-icon>
+          Masuk Sebagai Petugas
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <!-- PANEL PETUGAS -->
+  <ng-container *ngIf="isLoggedIn">
+    <!-- Filter dan Segmen -->
+    <ion-card>
+      <ion-card-content>
+        <ion-searchbar [(ngModel)]="keyword" placeholder="Cari nama atau NIK" (ionInput)="filterDokumen()"></ion-searchbar>
+
+        <ion-segment [(ngModel)]="statusFilter" (ionChange)="filterDokumen()">
+          <ion-segment-button value="">
+            <ion-label>Semua</ion-label>
+          </ion-segment-button>
+          <ion-segment-button value="Diproses">
+            <ion-label>Diproses</ion-label>
+          </ion-segment-button>
+          <ion-segment-button value="Selesai">
+            <ion-label>Selesai</ion-label>
+          </ion-segment-button>
+          <ion-segment-button value="Ditolak">
+            <ion-label>Ditolak</ion-label>
+          </ion-segment-button>
+        </ion-segment>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Tombol Ekspor -->
+    <ion-grid class="ion-padding">
+      <ion-row>
+        <ion-col size="6">
+          <ion-button expand="block" color="success" (click)="exportToPDF()">
+            <ion-icon name="download-outline" slot="start"></ion-icon>
+            Ekspor PDF
+          </ion-button>
+        </ion-col>
+        <ion-col size="6">
+          <ion-button expand="block" color="warning" (click)="exportToExcel()">
+            <ion-icon name="download-outline" slot="start"></ion-icon>
+            Ekspor Excel
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <!-- Header Dokumen -->
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title class="ion-text-center">📄 Semua Dokumen</ion-card-title>
+        <ion-card-subtitle class="ion-text-center">Lihat & ubah status dokumen yang masuk.</ion-card-subtitle>
+      </ion-card-header>
+    </ion-card>
+
+    <!-- Daftar Dokumen -->
+    <ion-card *ngFor="let item of dokumenMasuk" class="dokumen-card">
+      <ion-card-header>
+        <ion-card-title>{{ item.nama_pengaju }} ({{ item.nik }})</ion-card-title>
+        <ion-card-subtitle>
+          {{ item.jenis_dokumen }} - {{ item.nama_dokumen }}
+          <ion-badge [color]="getStatusColor(item.status)" class="ion-float-right">
+            {{ item.status }}
+          </ion-badge>
+        </ion-card-subtitle>
+      </ion-card-header>
+
+      <ion-card-content>
+        <ion-list lines="none">
+          <ion-item>
+            <ion-icon name="calendar-outline" slot="start" color="primary"></ion-icon>
+            <ion-label>Pengajuan: {{ item.tanggal_pengajuan | date:'dd MMM yyyy' }}</ion-label>
+          </ion-item>
+
+          <ion-item *ngIf="item.keterangan">
+            <ion-icon name="chatbox-ellipses-outline" slot="start" color="medium"></ion-icon>
+            <ion-label>Keterangan: {{ item.keterangan }}</ion-label>
+          </ion-item>
+
+          <ion-item *ngIf="item.file_url">
+            <ion-icon name="document-text-outline" slot="start" color="tertiary"></ion-icon>
+            <ion-label>
+              <a [href]="item.file_url" target="_blank">📅 Lihat Dokumen</a>
+            </ion-label>
+          </ion-item>
+
+          <ion-item *ngIf="item.file_balasan">
+            <ion-icon name="mail-open-outline" slot="start" color="success"></ion-icon>
+            <ion-label>
+              <a [href]="item.file_balasan" target="_blank">📄 Lihat Surat Balasan</a>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+
+        <!-- Upload Balasan jika status selesai -->
+<div *ngIf="item.status === 'Selesai'">
+  <ion-item>
+    <ion-label position="stacked">Upload Surat Balasan</ion-label>
+    <input type="file" (change)="onFileSelected($event, item.id)" accept=".pdf,.doc,.docx" />
+  </ion-item>
+  <ion-item>
+    <ion-label position="stacked">Nama File (Opsional)</ion-label>
+    <ion-input [(ngModel)]="fileNameInput[item.id]" placeholder="contoh: balasan_jl_pangu.pdf"></ion-input>
+  </ion-item>
+  <ion-button expand="block" color="primary" (click)="uploadBalasan(item.id)" *ngIf="fileUpload[item.id]">
+    <ion-icon slot="start" name="cloud-upload-outline"></ion-icon>
+    Upload Balasan
+  </ion-button>
+</div>
+        <!-- Tombol Aksi -->
+        <ion-grid class="ion-padding-top">
+          <ion-row>
+            <ion-col size="6" *ngIf="item.status === 'Diproses'">
+              <ion-button expand="block" color="success" (click)="ubahStatus(item.id, 'Selesai')">
+                <ion-icon slot="start" name="checkmark-circle-outline"></ion-icon>
+                Selesaikan
+              </ion-button>
+            </ion-col>
+            <ion-col size="6" *ngIf="item.status === 'Diproses'">
+              <ion-button expand="block" color="danger" (click)="ubahStatus(item.id, 'Ditolak')">
+                <ion-icon slot="start" name="close-circle-outline"></ion-icon>
+                Tolak
+              </ion-button>
+            </ion-col>
+            <ion-col size="12" *ngIf="item.status !== 'Diproses'">
+              <ion-button expand="block" color="medium" (click)="ubahStatus(item.id, 'Diproses')">
+                <ion-icon slot="start" name="refresh-outline"></ion-icon>
+                Kembalikan ke Diproses
+              </ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Jika Kosong -->
+    <div *ngIf="dokumenMasuk.length === 0" class="ion-text-center ion-padding">
+      <ion-icon name="folder-open-outline" size="large" color="medium"></ion-icon>
+      <p>Belum ada data dokumen.</p>
+    </div>
+
+    <!-- Tombol Logout -->
+    <ion-button expand="block" color="danger" (click)="logoutAdmin()">
+      <ion-icon slot="start" name="log-out-outline"></ion-icon>
+      Logout
+    </ion-button>
+  </ng-container>
+</ion-content>

@@ -1,0 +1,157 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title class="ion-text-center">
+      <ion-icon name="analytics-outline" class="header-icon"></ion-icon>
+      Dashboard
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="logout()" fill="clear">
+        <ion-icon slot="icon-only" name="log-out-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content fullscreen class="dashboard-content">
+  <div class="header-section">
+    <div class="logo-container">
+      <div class="logo-wrapper">
+        <img src="assets/padang.jpg" alt="Logo Padang Bulan" class="logo-img" />
+      </div>
+    </div>
+
+    <div class="welcome-section">
+      <h1 class="welcome-title">Selamat Datang</h1>
+      <p class="welcome-subtitle">Sistem Pengelolaan Dokumen</p>
+      <div class="office-name">
+        <ion-icon name="location-outline"></ion-icon>
+        <span>Kelurahan Padang Bulan</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="stats-container">
+    <div class="stat-card">
+      <ion-icon name="home-outline" class="stat-icon"></ion-icon>
+      <div class="stat-info">
+        <span class="stat-number">{{ totalDokumen }}</span>
+        <span class="stat-label">Dokumen</span>
+      </div>
+    </div>
+    <div class="stat-card">
+      <ion-icon name="time-outline" class="stat-icon"></ion-icon>
+      <div class="stat-info">
+        <span class="stat-number">{{ totalProses }}</span>
+        <span class="stat-label">Proses</span>
+      </div>
+    </div>
+    <div class="stat-card">
+      <ion-icon name="checkmark-circle-outline" class="stat-icon"></ion-icon>
+      <div class="stat-info">
+        <span class="stat-number">{{ totalSelesai }}</span>
+        <span class="stat-label">Selesai</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="menu-section">
+    <h2 class="section-title">Menu Utama</h2>
+    <ion-grid class="menu-grid">
+      <ion-row>
+        <ion-col size="6">
+          <div class="menu-card ajukan-card" (click)="goToAjukan()">
+            <div class="card-content">
+              <ion-icon name="cloud-upload-outline" class="menu-icon"></ion-icon>
+              <h3>Ajukan</h3>
+              <p>Buat permohonan dokumen baru</p>
+            </div>
+          </div>
+        </ion-col>
+        <ion-col size="6">
+          <div class="menu-card dokumen-card" (click)="goToDokumen()">
+            <div class="card-content">
+              <ion-icon name="folder-open-outline" class="menu-icon"></ion-icon>
+              <h3>Dokumen</h3>
+              <p>Lihat status dokumen Anda</p>
+            </div>
+          </div>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="6">
+          <div class="menu-card statistik-card" (click)="goToStatistik()">
+            <div class="card-content">
+              <ion-icon name="bar-chart-outline" class="menu-icon"></ion-icon>
+              <h3>Statistik</h3>
+              <p>Lihat grafik pengajuan</p>
+            </div>
+          </div>
+        </ion-col>
+        <ion-col size="6">
+          <div class="menu-card petugas-card" (click)="goToPetugas()">
+            <div class="card-content">
+              <ion-icon name="people-outline" class="menu-icon"></ion-icon>
+              <h3>Petugas</h3>
+              <p>Informasi kontak petugas</p>
+            </div>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+
+  <div class="info-section">
+    <ion-card class="info-card date-card">
+      <div class="card-header">
+        <ion-icon name="calendar-outline" class="card-icon"></ion-icon>
+        <h3>Hari Ini</h3>
+      </div>
+      <div class="card-body">
+        <p class="date-text">{{ today | date: 'EEEE, dd MMMM yyyy' }}</p>
+      </div>
+    </ion-card>
+
+    <ion-card class="info-card notification-card">
+      <div class="card-header">
+        <ion-icon name="notifications-outline" class="card-icon"></ion-icon>
+        <h3>Notifikasi</h3>
+        <ion-badge color="danger" class="notification-badge">2</ion-badge>
+      </div>
+      <div class="card-body">
+        <div class="notification-item">
+          <ion-icon name="checkmark-circle" color="success"></ion-icon>
+          <span>1 dokumen Anda sudah selesai</span>
+        </div>
+        <div class="notification-item">
+          <ion-icon name="paper-plane" color="primary"></ion-icon>
+          <span>Pengajuan baru berhasil dikirim</span>
+        </div>
+      </div>
+    </ion-card>
+
+    <ion-card class="info-card guide-card">
+      <div class="card-header">
+        <ion-icon name="help-circle-outline" class="card-icon"></ion-icon>
+        <h3>Panduan Singkat</h3>
+      </div>
+      <div class="card-body">
+        <div class="guide-step">
+          <div class="step-number">1</div>
+          <span>Pilih menu <strong>Ajukan</strong> untuk membuat permohonan</span>
+        </div>
+        <div class="guide-step">
+          <div class="step-number">2</div>
+          <span>Pantau status di menu <strong>Dokumen</strong></span>
+        </div>
+        <div class="guide-step">
+          <div class="step-number">3</div>
+          <span>Hubungi <strong>Petugas</strong> jika butuh bantuan</span>
+        </div>
+      </div>
+    </ion-card>
+  </div>
+
+  <div class="footer-section">
+    <p>© 2024 Kelurahan Padang Bulan</p>
+  </div>
+</ion-content>

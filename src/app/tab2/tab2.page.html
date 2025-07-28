@@ -1,0 +1,134 @@
+<ion-header translucent="true">
+  <ion-toolbar color="primary">
+    <ion-title class="ion-text-center">📁 Entri Dokumen Warga</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content fullscreen class="ion-padding content-background">
+
+  <!-- Hero -->
+  <div class="hero-banner ion-margin-bottom">
+    <h2 class="ion-text-center">Administrasi Desa Padang Bulan</h2>
+    <p class="ion-text-center">Silakan isi form untuk mencatat dokumen penting milik warga.</p>
+  </div>
+
+  <!-- Formulir Dokumen -->
+  <ion-card class="form-card">
+    <ion-card-header>
+      <ion-card-title>📝 Formulir Dokumen</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <ion-list lines="full">
+
+        <!-- Nama -->
+        <ion-item>
+          <ion-label position="floating">Nama Lengkap</ion-label>
+          <ion-input [(ngModel)]="namaWarga"></ion-input>
+        </ion-item>
+
+        <!-- NIK -->
+        <ion-item>
+          <ion-label position="floating">NIK</ion-label>
+          <ion-input type="number" [(ngModel)]="nik"></ion-input>
+        </ion-item>
+
+        <!-- Alamat -->
+        <ion-item>
+          <ion-label position="floating">Alamat Lengkap</ion-label>
+          <ion-textarea [(ngModel)]="alamat"></ion-textarea>
+        </ion-item>
+
+        <!-- Jenis Dokumen -->
+        <ion-item>
+          <ion-label>Jenis Dokumen</ion-label>
+        </ion-item>
+        <ion-grid>
+          <ion-row>
+            <ion-col size="6" size-md="4" *ngFor="let jenis of dokumenList">
+              <ion-chip [color]="jenisDokumen === jenis ? 'success' : 'medium'" (click)="jenisDokumen = jenis" outline>
+                <ion-icon name="document-outline" color="dark"></ion-icon>
+                <ion-label>{{ jenis }}</ion-label>
+              </ion-chip>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+
+        <!-- Nomor Dokumen -->
+        <ion-item>
+          <ion-label position="floating">Nomor Dokumen</ion-label>
+          <ion-input [(ngModel)]="nomorDokumen"></ion-input>
+        </ion-item>
+
+        <!-- Tanggal Terbit -->
+        <ion-item button detail (click)="bukaDatePicker('terbit')">
+          <ion-icon name="calendar-outline" slot="start"></ion-icon>
+          <ion-label>
+            {{ tanggalTerbit ? (tanggalTerbit | date:'dd MMM yyyy') : 'Pilih Tanggal Terbit' }}
+          </ion-label>
+        </ion-item>
+
+        <!-- Tanggal Berakhir -->
+        <ion-item button detail (click)="bukaDatePicker('berakhir')">
+          <ion-icon name="calendar-outline" slot="start"></ion-icon>
+          <ion-label>
+            {{ tanggalBerakhir ? (tanggalBerakhir | date:'dd MMM yyyy') : 'Tanggal Berakhir (Opsional)' }}
+          </ion-label>
+        </ion-item>
+
+        <!-- Upload Dokumen -->
+        <ion-item lines="none">
+          <ion-label>Upload Dokumen (PDF/Gambar)</ion-label>
+        </ion-item>
+        <ion-item>
+          <input type="file" (change)="uploadDokumen($event)" accept="application/pdf,image/*" />
+        </ion-item>
+
+        <!-- Preview Dokumen -->
+        <div *ngIf="dokumenPreview" class="ion-text-center ion-padding-top">
+          <img *ngIf="dokumenPreview.includes('image')" [src]="dokumenPreview" style="max-width: 100%; border-radius: 8px;" />
+          <p *ngIf="dokumenPreview.includes('.pdf') || dokumenPreview.includes('application/pdf')">
+            📎 <a [href]="dokumenPreview" target="_blank">Lihat Dokumen PDF</a>
+          </p>
+        </div>
+
+      </ion-list>
+
+      <!-- Tombol Simpan -->
+      <ion-button expand="block" color="primary" shape="round" size="large" (click)="simpanDokumen()">
+        <ion-icon name="save-outline" slot="start"></ion-icon>
+        Simpan Dokumen
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Tombol Kembali -->
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button color="medium" size="small" (click)="kembaliKeDashboard()">
+      <ion-icon name="arrow-back-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <!-- Modal Date Picker -->
+  <ion-modal [isOpen]="showDateModal" (didDismiss)="showDateModal = false">
+    <ng-template>
+      <ion-content class="ion-padding">
+        <ion-header translucent>
+          <ion-toolbar color="primary">
+            <ion-title>Pilih Tanggal</ion-title>
+            <ion-buttons slot="end">
+              <ion-button (click)="showDateModal = false">Tutup</ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+        </ion-header>
+
+        <ion-datetime
+          [value]="activeDateType === 'terbit' ? tanggalTerbit : tanggalBerakhir"
+          presentation="date"
+          (ionChange)="tanggalDipilih($event)">
+        </ion-datetime>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+
+</ion-content>

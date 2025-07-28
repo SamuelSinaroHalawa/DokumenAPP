@@ -1,0 +1,56 @@
+<ion-content class="ion-padding" fullscreen>
+  <div class="register-container">
+    <ion-card class="glass-card">
+      <ion-card-header class="ion-text-center">
+        <ion-icon name="person-add-outline" size="large" color="primary"></ion-icon>
+        <ion-card-title class="ion-margin-top">Registrasi Pengguna</ion-card-title>
+        <ion-card-subtitle>Buat akun baru untuk akses layanan</ion-card-subtitle>
+      </ion-card-header>
+
+      <ion-card-content>
+        <!-- NIK -->
+        <ion-item class="input-custom" lines="inset">
+          <ion-icon slot="start" name="card-outline" color="primary"></ion-icon>
+          <ion-input
+            placeholder="NIK"
+            type="text"
+            inputmode="numeric"
+            maxlength="16"
+            [(ngModel)]="nik"
+          ></ion-input>
+        </ion-item>
+
+        <!-- Nama Lengkap -->
+        <ion-item class="input-custom" lines="inset">
+          <ion-icon slot="start" name="person-outline" color="primary"></ion-icon>
+          <ion-input
+            placeholder="Nama Lengkap"
+            type="text"
+            [(ngModel)]="nama"
+          ></ion-input>
+        </ion-item>
+
+        <!-- Password -->
+        <ion-item class="input-custom" lines="inset">
+          <ion-icon slot="start" name="lock-closed-outline" color="primary"></ion-icon>
+          <ion-input
+            placeholder="Password"
+            type="password"
+            [(ngModel)]="password"
+          ></ion-input>
+        </ion-item>
+
+        <!-- Tombol Daftar -->
+        <ion-button expand="block" color="primary" shape="round" (click)="register()">
+          <ion-icon name="person-add-outline" slot="start"></ion-icon>
+          Daftar
+        </ion-button>
+
+        <!-- Link ke Login -->
+        <ion-button expand="block" fill="clear" color="medium" (click)="goToLogin()">
+          Sudah punya akun? <strong>Login di sini</strong>
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>

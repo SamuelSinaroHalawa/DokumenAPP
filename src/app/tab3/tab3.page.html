@@ -1,0 +1,175 @@
+<ion-header translucent="true">
+  <ion-toolbar color="primary">
+    <ion-title class="ion-text-center">📄 Daftar Dokumen</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content fullscreen class="ion-padding content-background">
+
+  <!-- Header -->
+  <div class="header-section ion-text-center ion-margin-bottom">
+    <h2>🗂️ Data Dokumen Warga</h2>
+    <p>Daftar pengajuan dokumen oleh warga Kelurahan Padang Bulan.</p>
+  </div>
+
+  <!-- 🔍 Pencarian & Filter -->
+  <ion-item lines="none" class="ion-margin-bottom">
+    <ion-icon name="search-outline" slot="start" color="primary"></ion-icon>
+    <ion-input placeholder="Cari nama/NIK..." [(ngModel)]="filterText" (ionInput)="applyFilter()"></ion-input>
+  </ion-item>
+
+  <ion-item lines="none" class="ion-margin-bottom">
+    <ion-label>Status</ion-label>
+    <ion-select interface="popover" [(ngModel)]="filterStatus" (ionChange)="applyFilter()">
+      <ion-select-option value="">Semua</ion-select-option>
+      <ion-select-option value="Diproses">Diproses</ion-select-option>
+      <ion-select-option value="Selesai">Selesai</ion-select-option>
+      <ion-select-option value="Ditolak">Ditolak</ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <!-- 📋 Daftar Dokumen -->
+  <ion-card *ngFor="let item of filteredDokumenList" class="dokumen-card">
+    <ion-card-header>
+      <ion-card-subtitle>
+        <ion-chip color="tertiary" outline>
+          <ion-icon name="person-circle-outline" color="tertiary"></ion-icon>
+          <ion-label>{{ item.nama_pengaju }} ({{ item.nik }})</ion-label>
+        </ion-chip>
+      </ion-card-subtitle>
+      <ion-card-title>
+        📁 {{ item.jenis_dokumen }} - {{ item.nama_dokumen }}
+      </ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+
+      <!-- Info Dokumen -->
+      <ion-list lines="none">
+        <ion-item>
+          <ion-icon name="calendar-outline" slot="start" color="primary"></ion-icon>
+          <ion-label>
+            Pengajuan: {{ item.tanggal_pengajuan | date:'dd MMM yyyy' }} <br />
+            <span *ngIf="item.tanggal_selesai">Selesai: {{ item.tanggal_selesai | date:'dd MMM yyyy' }}</span>
+          </ion-label>
+        </ion-item>
+
+        <ion-item>
+          <ion-icon name="document-text-outline" slot="start" color="tertiary"></ion-icon>
+          <ion-label>
+            Status:
+            <ion-badge [color]="getStatusColor(item.status)" class="ion-margin-start">
+              {{ item.status }}
+            </ion-badge>
+          </ion-label>
+        </ion-item>
+
+        <ion-item *ngIf="item.keterangan">
+          <ion-icon name="location-outline" slot="start" color="primary"></ion-icon>
+          <ion-label>
+            Alamat: {{ item.keterangan }}
+          </ion-label>
+        </ion-item>
+      </ion-list>
+
+      <!-- 🔗 Link File -->
+      <div *ngIf="item.file_url" class="ion-padding-top">
+        <ion-button expand="block" fill="outline" color="success" [href]="item.file_url" target="_blank">
+          <ion-icon name="cloud-download-outline" slot="start"></ion-icon>
+          Lihat / Unduh Dokumen
+        </ion-button>
+      </div>
+
+     <ion-button
+  expand="block"
+  fill="outline"
+  color="success"
+  *ngIf="item.file_balasan"
+  (click)="lihatSuratBalasan(item)"
+>
+  <ion-icon name="document-outline" slot="start"></ion-icon>
+  Unduh Surat Balasan
+</ion-button>
+
+      <!-- 🔧 Tombol Aksi -->
+      <ion-grid class="ion-padding-top">
+        <ion-row>
+          <ion-col size="4">
+            <ion-button expand="block" color="medium" fill="outline" (click)="lihatDetail(item)">
+              <ion-icon slot="start" name="eye-outline"></ion-icon>
+              Detail
+            </ion-button>
+          </ion-col>
+          <ion-col size="4">
+            <ion-button expand="block" color="warning" fill="outline" (click)="editDokumen(item)">
+              <ion-icon slot="start" name="create-outline"></ion-icon>
+              Edit
+            </ion-button>
+          </ion-col>
+          <ion-col size="4">
+            <ion-button expand="block" color="danger" fill="solid" (click)="hapusDokumen(item.id)">
+              <ion-icon slot="start" name="trash-outline"></ion-icon>
+              Hapus
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+      <!-- ✏️ Form Edit Inline -->
+      <div *ngIf="editingItemId === item.id" class="edit-form ion-padding ion-margin-top"
+        style="background: #f7f8fa; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+        <ion-item>
+          <ion-label position="floating">Nama Pengaju</ion-label>
+          <ion-input [(ngModel)]="editForm.nama_pengaju"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">NIK</ion-label>
+          <ion-input [(ngModel)]="editForm.nik"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">Jenis Dokumen</ion-label>
+          <ion-input [(ngModel)]="editForm.jenis_dokumen"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">Nomor Dokumen</ion-label>
+          <ion-input [(ngModel)]="editForm.nama_dokumen"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">Tanggal Pengajuan</ion-label>
+          <ion-input type="date" [(ngModel)]="editForm.tanggal_pengajuan"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">Tanggal Selesai</ion-label>
+          <ion-input type="date" [(ngModel)]="editForm.tanggal_selesai"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">Alamat Lengkap</ion-label>
+          <ion-textarea [(ngModel)]="editForm.keterangan"></ion-textarea>
+        </ion-item>
+
+        <ion-row class="ion-padding-top">
+          <ion-col size="6">
+            <ion-button expand="block" color="success" (click)="updateDokumen()">
+              <ion-icon slot="start" name="save-outline"></ion-icon>
+              Simpan
+            </ion-button>
+          </ion-col>
+          <ion-col size="6">
+            <ion-button expand="block" color="medium" (click)="batalEdit()">
+              <ion-icon slot="start" name="close-outline"></ion-icon>
+              Batal
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </div>
+
+    </ion-card-content>
+  </ion-card>
+
+  <!-- ❌ Kosong -->
+  <div *ngIf="filteredDokumenList.length === 0" class="empty-state ion-text-center ion-padding">
+    <ion-icon name="file-tray-outline" size="large" color="medium"></ion-icon>
+    <p>Tidak ada dokumen ditemukan.</p>
+  </div>
+
+</ion-content>

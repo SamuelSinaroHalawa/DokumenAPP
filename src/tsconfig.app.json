@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "types": [],
+    "typeRoots": ["node_modules/@types"]
+  },
+  "files": [
+    "src/typings.d.ts"
+  ]
+}

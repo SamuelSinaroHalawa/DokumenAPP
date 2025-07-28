@@ -1,0 +1,180 @@
+/* ===== Tab5 SCSS: Panel Petugas ===== */
+
+/* Background */
+.content-background {
+  --background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding-bottom: 20px;
+}
+
+/* ==================== LOGIN SECTION ==================== */
+.login-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 85vh;
+  padding: 20px;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 400px;
+  margin: auto;
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  animation: fadeIn 0.4s ease-in-out;
+}
+
+.glass {
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: white;
+}
+
+/* Login Inputs */
+ion-item {
+  background: white;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  --padding-start: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.login-btn {
+  margin-top: 16px;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* ==================== PETUGAS PANEL ==================== */
+ion-searchbar {
+  border-radius: 12px;
+  margin-bottom: 12px;
+  --box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+ion-segment {
+  margin-top: 8px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+ion-segment-button {
+  font-weight: 600;
+}
+
+/* Header Text */
+ion-card-title,
+ion-card-subtitle {
+  text-align: center;
+  color: #333;
+  font-weight: 600;
+}
+
+/* ==================== KARTU DOKUMEN ==================== */
+.dokumen-card {
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  margin-bottom: 20px;
+  transition: transform 0.2s ease;
+}
+
+.dokumen-card:hover {
+  transform: translateY(-2px);
+}
+
+/* Badge Status */
+ion-badge {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 12px;
+}
+
+/* Tombol Aksi */
+ion-button {
+  font-size: 13px;
+  font-weight: 500;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
+}
+
+ion-button:hover {
+  transform: scale(1.02);
+}
+
+ion-button[color="danger"] {
+  margin-top: 24px;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(255, 0, 0, 0.15);
+}
+
+/* Upload File */
+input[type="file"] {
+  font-size: 13px;
+  background: #f1f1f1;
+  padding: 8px;
+  border-radius: 6px;
+  margin-top: 6px;
+}
+
+ion-input::placeholder {
+  font-style: italic;
+  color: #888;
+}
+
+/* ==================== EMPTY STATE ==================== */
+ion-content .ion-text-center p {
+  color: white;
+  font-size: 14px;
+  opacity: 0.85;
+  margin-top: 8px;
+}
+
+ion-content .ion-text-center ion-icon {
+  color: white;
+  font-size: 32px;
+  margin-bottom: 8px;
+}
+
+/* ==================== ANIMASI ==================== */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ==================== RESPONSIVE ==================== */
+@media (max-width: 768px) {
+  .login-card {
+    width: 90%;
+  }
+
+  ion-card-title {
+    font-size: 16px;
+  }
+
+  ion-card-subtitle {
+    font-size: 13px;
+  }
+
+  ion-button {
+    font-size: 12px;
+  }
+
+  ion-segment-button {
+    font-size: 12px;
+  }
+
+  ion-badge {
+    font-size: 11px;
+  }
+}
